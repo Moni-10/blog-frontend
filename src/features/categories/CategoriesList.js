@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCategories, deleteCategory, updateCategory } from './CategoriesSlice';
 import { Table, Container, Button, Image, Modal, Form } from 'react-bootstrap';
 import { API_BASE_URL } from '../../api';
+import { Link } from 'react-router-dom';
 
 const CategoriesList = () => {
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ const CategoriesList = () => {
 
   return (
     <Container className="mt-4">
-      <h2>Categories</h2>
+      <div className="category-page-head"><h2>Categories</h2><Link className="primary-action" to="/add-category">+ Add Category</Link></div>
 
       {Object.keys(groupedByLevel)
         .sort((a, b) => a - b)

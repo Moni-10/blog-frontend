@@ -11,6 +11,8 @@ const BlogList = () => {
   const [websites, setWebsites] = useState([]);
   const [selectedWebsite, setSelectedWebsite] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [actionId, setActionId] = useState("");
+  const [message, setMessage] = useState("");
 
 
   // Load blogs + websites
@@ -47,6 +49,36 @@ const BlogList = () => {
       .catch((err) => console.error(err));
   };
 
+  const hideFromWebsite = async (blog) => {
+    if (!window.confirm(`Hide "${blog.title}" from the public website? It will remain saved as a draft.`)) return;
+    try {
+      setActionId(blog._id);
+      setMessage("");
+      await api.put(`${API_BASE}/blogs/update/${blog._id}`, { status: "draft" });
+      setMessage("Blog website se hide ho gaya hai aur Draft me safe hai.");
+      fetchBlogs();
+    } catch (error) {
+      setMessage(error.response?.data?.error || "Blog hide nahi ho saka.");
+    } finally {
+      setActionId("");
+    }
+  };
+
+  const deletePermanently = async (blog) => {
+    if (!window.confirm(`Permanently delete "${blog.title}"? This cannot be undone.`)) return;
+    try {
+      setActionId(blog._id);
+      setMessage("");
+      await api.delete(`${API_BASE}/blogs/delete/${blog._id}`);
+      setMessage("Blog permanently delete ho gaya hai.");
+      fetchBlogs();
+    } catch (error) {
+      setMessage(error.response?.data?.error || "Blog delete nahi ho saka.");
+    } finally {
+      setActionId("");
+    }
+  };
+
   // Filter blogs based on website + search
   useEffect(() => {
     let data = blogs;
@@ -67,8 +99,10 @@ const BlogList = () => {
   }, [selectedWebsite, searchText, blogs]);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 blog-library-page">
       <h2>Blogs</h2>
+
+      {message && <div className="alert alert-info mt-3">{message}</div>}
 
       {/* Filters */}
       <div className="row mt-3 mb-4">
@@ -116,12 +150,14 @@ const BlogList = () => {
       </div>
 
       {/* Blog Table */}
-      <table className="table table-bordered">
+      <div className="blog-table-scroll"><table className="table table-bordered blog-library-table">
         <thead>
           <tr>
+            <th>Image</th>
             <th>Title</th>
             <th>Slug</th>
             <th>Website</th>
+            <th>Status</th>
             <th>Created</th>
             <th>Actions</th>
           </tr>
@@ -130,28 +166,52 @@ const BlogList = () => {
         <tbody>
           {filteredBlogs.length === 0 ? (
             <tr>
-              <td colSpan="5" className="text-center">No blogs found</td>
+              <td colSpan="7" className="text-center">No blogs found</td>
             </tr>
           ) : (
             filteredBlogs.map((blog) => (
               <tr key={blog._id}>
+                <td>{blog.featuredImage ? <img className="blog-library-thumb" src={blog.featuredImage} alt={blog.featuredImageAlt || blog.title} /> : <span className="no-blog-image">No image</span>}</td>
                 <td>{blog.title}</td>
                 <td>{blog.slug}</td>
                 <td>{blog.websiteId?.name || websites.find((w) => w._id === blog.websiteId)?.name}</td>
-                <td>{new Date(blog.createdAt).toLocaleDateString()}</td>
                 <td>
+                  <span className={`badge ${blog.status === "published" ? "bg-success" : "bg-secondary"}`}>
+                    {blog.status || "draft"}
+                  </span>
+                </td>
+                <td>{new Date(blog.createdAt).toLocaleDateString()}</td>
+                <td><div className="blog-row-actions">
                   <Link
                     to={`/edit-blog/${blog._id}`}
                     className="btn btn-primary btn-sm"
                   >
                     Edit
                   </Link>
-                </td>
+                  {blog.status === "published" && (
+                    <button
+                      type="button"
+                      className="btn btn-warning btn-sm ms-2"
+                      disabled={actionId === blog._id}
+                      onClick={() => hideFromWebsite(blog)}
+                    >
+                      Hide from website
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm ms-2"
+                    disabled={actionId === blog._id}
+                    onClick={() => deletePermanently(blog)}
+                  >
+                    Delete permanently
+                  </button>
+                </div></td>
               </tr>
             ))
           )}
         </tbody>
-      </table>
+      </table></div>
     </div>
   );
 };

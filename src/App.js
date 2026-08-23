@@ -13,6 +13,7 @@ import BlogEditor from "./components/BlogEditor";
 import EditBlog from "./components/EditBlog";
 import BlogList from "./components/BlogList";
 import WebsiteManager from "./components/WebsiteManager";
+import Enquiries from "./components/Enquiries";
 import "./App.css";
 
 const Guard = ({ children }) => <ProtectedRoute>{children}</ProtectedRoute>;
@@ -27,6 +28,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<Guard><Home /></Guard>} />
             <Route path="/websites" element={<Guard><WebsiteManager /></Guard>} />
+            <Route path="/enquiries" element={<Guard><Enquiries /></Guard>} />
             <Route path="/categories" element={<Guard><CategoriesList /></Guard>} />
             <Route path="/products" element={<Guard><ProductsList /></Guard>} />
             <Route path="/add-category" element={<Guard><CategoryForm /></Guard>} />
