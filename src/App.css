@@ -335,6 +335,13 @@
   min-height: 100vh;
   padding: 42px;
 }
+.admin-shell.login-shell .admin-main {
+  width: 100%;
+  min-height: 100vh;
+  margin-left: 0;
+  padding: 0;
+  overflow: hidden;
+}
 .page-wrap {
   max-width: 1400px;
   margin: 0 auto;

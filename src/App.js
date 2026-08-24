@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import CategoriesList from "./features/categories/CategoriesList";
 import ProductsList from "./features/products/ProductsList";
@@ -18,10 +18,12 @@ import "./App.css";
 
 const Guard = ({ children }) => <ProtectedRoute>{children}</ProtectedRoute>;
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
+
   return (
-    <Router>
-      <div className="admin-shell">
+      <div className={`admin-shell${isLoginPage ? " login-shell" : ""}`}>
         <Navbar />
         <main className="admin-main">
           <Routes>
@@ -40,6 +42,13 @@ function App() {
           </Routes>
         </main>
       </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
