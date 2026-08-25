@@ -476,6 +476,7 @@ foreach (($blog['faqs'] ?? []) as $faq) {
                 margin-right: 14px
             }
         }
+
         /* Compact, readable article page */
         .hero {
             max-width: none;
@@ -526,7 +527,7 @@ foreach (($blog['faqs'] ?? []) as $faq) {
             box-shadow: none
         }
 
-        .content > p:first-child {
+        .content>p:first-child {
             font-size: 17px
         }
 
@@ -539,34 +540,185 @@ foreach (($blog['faqs'] ?? []) as $faq) {
         }
 
         @media(max-width:650px) {
-            .hero { padding: 32px 18px 55px }
-            .hero h1 { font-size: 34px }
-            .article { margin-top: -24px }
-            .content { padding: 26px 18px }
+            .hero {
+                padding: 32px 18px 55px
+            }
+
+            .hero h1 {
+                font-size: 34px
+            }
+
+            .article {
+                margin-top: -24px
+            }
+
+            .content {
+                padding: 26px 18px
+            }
         }
 
-        .article-layout { max-width:1200px; margin:0 auto; padding:42px 20px 70px; display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:32px; align-items:start }
-        .article-main .hero { width:100%; margin:0 0 24px; padding:0 0 22px; text-align:left; background:transparent; border-bottom:1px solid #eadde0 }
-        .article-main .hero h1 { margin:8px 0 10px; max-width:none; font-size:clamp(30px,4vw,45px); text-align:left }
-        .article-main .hero-excerpt { max-width:none; margin:12px 0 0; text-align:left }
-        .article-main .byline { text-align:left }
-        .article-main .article { width:100%; max-width:none; margin:0; padding:0 }
-        .article-main .featured { width:100%; max-height:540px; object-fit:cover }
-        .article-main .content { width:100%; margin-top:22px }
-        .side-panel { position:sticky; top:20px; padding:22px; background:#fff; border:1px solid #e5e5e5; border-radius:12px; box-shadow:0 8px 26px #0000000b }
-        .side-panel h3 { margin:0 0 14px; padding-bottom:10px; border-bottom:2px solid #bd001b; color:#172f43; font-size:13px; text-transform:uppercase }
-        .side-search { display:flex; margin-bottom:26px }
-        .side-search input { min-width:0; flex:1; height:40px; padding:0 11px; border:1px solid #ddd; border-right:0 }
-        .side-search button { width:42px; border:0; background:#bd001b; color:#fff; font-size:17px }
-        .recent-post { display:grid; grid-template-columns:84px minmax(0,1fr); gap:11px; align-items:center; padding:11px 0; border-bottom:1px solid #eee; color:#1c3042; text-decoration:none }
-        .recent-post img { width:84px; height:58px; object-fit:cover }
-        .recent-post strong { display:block; font-size:12px; line-height:1.35 }
-        .quote-box { margin-top:26px; padding:18px; background:#fff3f5; border-left:4px solid #bd001b }
-        .quote-box p { font-size:13px; line-height:1.5 }
-        .quote-box a { display:block; padding:11px; background:#bd001b; color:#fff; text-align:center; text-decoration:none; font-size:12px; font-weight:800; text-transform:uppercase }
-        @media(max-width:900px) { .article-layout { grid-template-columns:1fr } .side-panel { position:static } }
-        @media(max-width:640px) { .article-layout { padding:25px 14px 50px } .article-main .hero h1 { font-size:31px } }
-</style>
+        .article-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 42px 20px 70px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 32px;
+            align-items: start
+        }
+
+        .article-main .hero {
+            width: 100%;
+            margin: 0 0 24px;
+            padding: 0 0 22px;
+            text-align: left;
+            background: transparent;
+            border-bottom: 1px solid #eadde0
+        }
+
+        .article-main .hero h1 {
+            margin: 8px 0 10px;
+            max-width: none;
+            font-size: clamp(30px, 4vw, 45px);
+            text-align: left
+        }
+
+        .article-main .hero-excerpt {
+            max-width: none;
+            margin: 12px 0 0;
+            text-align: left
+        }
+
+        .article-main .byline {
+            text-align: left
+        }
+
+        .article-main .article {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0
+        }
+
+        .article-main .featured {
+            width: 100%;
+            max-height: 540px;
+            object-fit: cover
+        }
+
+        .article-main .content {
+            width: 100%;
+            margin-top: 22px
+        }
+
+        .side-panel {
+            position: sticky;
+            top: 20px;
+            padding: 22px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            box-shadow: 0 8px 26px #0000000b
+        }
+
+        .side-panel h3 {
+            margin: 0 0 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #bd001b;
+            color: #172f43;
+            font-size: 13px;
+            text-transform: uppercase
+        }
+
+        .side-search {
+            display: flex;
+            margin-bottom: 26px
+        }
+
+        .side-search input {
+            min-width: 0;
+            flex: 1;
+            height: 40px;
+            padding: 0 11px;
+            border: 1px solid #ddd;
+            border-right: 0
+        }
+
+        .side-search button {
+            width: 42px;
+            border: 0;
+            background: #bd001b;
+            color: #fff;
+            font-size: 17px
+        }
+
+        .recent-post {
+            display: grid;
+            grid-template-columns: 84px minmax(0, 1fr);
+            gap: 11px;
+            align-items: center;
+            padding: 11px 0;
+            border-bottom: 1px solid #eee;
+            color: #1c3042;
+            text-decoration: none
+        }
+
+        .recent-post img {
+            width: 84px;
+            height: 58px;
+            object-fit: cover
+        }
+
+        .recent-post strong {
+            display: block;
+            font-size: 12px;
+            line-height: 1.35
+        }
+
+        .quote-box {
+            margin-top: 26px;
+            padding: 18px;
+            background: #fff3f5;
+            border-left: 4px solid #bd001b
+        }
+
+        .quote-box p {
+            font-size: 13px;
+            line-height: 1.5
+        }
+
+        .quote-box a {
+            display: block;
+            padding: 11px;
+            background: #bd001b;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase
+        }
+
+        @media(max-width:900px) {
+            .article-layout {
+                grid-template-columns: 1fr
+            }
+
+            .side-panel {
+                position: static
+            }
+        }
+
+        @media(max-width:640px) {
+            .article-layout {
+                padding: 25px 14px 50px
+            }
+
+            .article-main .hero h1 {
+                font-size: 31px
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -575,25 +727,42 @@ foreach (($blog['faqs'] ?? []) as $faq) {
     <?php if (!$blog): ?><main class="hero">
             <h1>Blog not found</h1>
             <p>Check the URL or return to all blogs.</p>
-        </main><?php else: ?><section class="page-banner hero"><span class="category">MMW KNOWLEDGE CENTER</span><h1>Industrial Insights</h1><div class="byline">Ideas, technology and machine expertise</div></section><div class="article-layout"><main class="article-main"><header class="hero"><span class="category"><?= e($blog['category']['name'] ?? 'Industrial Insights') ?></span>
-            <h1><?= e($blog['title']) ?></h1>
-            <div class="byline">By <?= e($blog['authorName'] ?? 'MMW Team') ?> · <?= e(date('d F Y', strtotime($blog['publishedAt'] ?? $blog['createdAt']))) ?></div>
-            <?php if (!empty($blog['excerpt'])): ?><p class="hero-excerpt"><?= e($blog['excerpt']) ?></p><?php endif; ?>
-        </header>
-        <article class="article"><?php if ($blog['featuredImage'] ?? ''): ?><img class="featured" src="<?= e($blog['featuredImage']) ?>" alt="<?= e($blog['featuredImageAlt'] ?? $blog['title']) ?>"><?php endif; ?><div class="content"><?= $blog['content'] ?></div><?php if ($blog['youtubeUrl'] ?? ''): $vid = preg_replace('~.*(?:youtu.be/|v=|embed/)([^?&/]+).*~', '$1', $blog['youtubeUrl']); ?><div class="video"><iframe src="https://www.youtube.com/embed/<?= e($vid) ?>" allowfullscreen></iframe></div><?php endif; ?></article>
-        <?php if (!empty($blog['faqs'])): ?><section class="faq">
-                <h2>Frequently Asked Questions</h2><?php foreach ($blog['faqs'] as $faq): ?><details>
-                        <summary><?= e($faq['question']) ?></summary>
-                        <p><?= nl2br(e($faq['answer'])) ?></p>
-                    </details><?php endforeach; ?>
-            </section><?php endif; ?>
-        <?php if (!empty($blog['relatedProducts']) || !empty($blog['relatedBlogs'])): ?><section class="related">
-                <h2>Related Resources</h2>
-                <div class="related-grid"><?php foreach (($blog['relatedProducts'] ?? []) as $item): ?><a href="#"><?= e($item['name'] ?? 'Product') ?></a><?php endforeach; ?><?php foreach (($blog['relatedBlogs'] ?? []) as $item): ?><a href="blog.php?domain=<?= e(urlencode($domain)) ?>&websiteId=<?= e(urlencode($websiteId)) ?>&slug=<?= e(urlencode($item['slug'] ?? '')) ?>"><?= e($item['title'] ?? 'Blog') ?></a><?php endforeach; ?></div>
-            </section><?php endif; ?>
-        <?php if (!empty($blog['cta']['label'])): ?><section class="cta">
-                <h2>Ready to discuss your requirement?</h2><a href="<?= e($blog['cta']['url'] ?? '/contact') ?>"><?= e($blog['cta']['label']) ?></a>
-            </section><?php endif; ?></main><aside class="side-panel"><h3>Search</h3><form class="side-search" action="blogs.php" method="get"><input type="search" name="q" placeholder="Search posts"><button aria-label="Search">⌕</button></form><h3>Recent Posts</h3><?php foreach ($recentBlogs as $recent): if (($recent['slug'] ?? '') === $slug) continue; $ri=$recent['featuredImage'] ?? ($recent['images'][0] ?? ''); ?><a class="recent-post" href="blog.php?slug=<?= e(urlencode($recent['slug'] ?? '')) ?>"><?php if($ri): ?><img src="<?= e($ri) ?>" alt=""><?php endif; ?><strong><?= e($recent['title'] ?? 'Blog') ?></strong></a><?php endforeach; ?><div class="quote-box"><h3>Request a Quote</h3><p>Discuss your printing and converting machine requirement with our team.</p><a href="/contact-us.php">Contact Us</a></div></aside></div><?php endif; ?>
+        </main><?php else: ?><section class="page-banner hero"><span class="category">MMW KNOWLEDGE CENTER</span>
+            <h1>Industrial Insights</h1>
+            <div class="byline">Ideas, technology and machine expertise</div>
+        </section>
+        <div class="article-layout">
+            <main class="article-main">
+                <header class="hero"><span class="category"><?= e($blog['category']['name'] ?? 'Industrial Insights') ?></span>
+                    <h1><?= e($blog['title']) ?></h1>
+                    <div class="byline">By <?= e($blog['authorName'] ?? 'MMW Team') ?> · <?= e(date('d F Y', strtotime($blog['publishedAt'] ?? $blog['createdAt']))) ?></div>
+                    <?php if (!empty($blog['excerpt'])): ?><p class="hero-excerpt"><?= e($blog['excerpt']) ?></p><?php endif; ?>
+                </header>
+                <article class="article"><?php if ($blog['featuredImage'] ?? ''): ?><img class="featured" src="<?= e($blog['featuredImage']) ?>" alt="<?= e($blog['featuredImageAlt'] ?? $blog['title']) ?>"><?php endif; ?><div class="content"><?= $blog['content'] ?></div><?php if ($blog['youtubeUrl'] ?? ''): $vid = preg_replace('~.*(?:youtu.be/|v=|embed/)([^?&/]+).*~', '$1', $blog['youtubeUrl']); ?><div class="video"><iframe src="https://www.youtube.com/embed/<?= e($vid) ?>" allowfullscreen></iframe></div><?php endif; ?></article>
+                <?php if (!empty($blog['faqs'])): ?><section class="faq">
+                        <h2>Frequently Asked Questions</h2><?php foreach ($blog['faqs'] as $faq): ?><details>
+                                <summary><?= e($faq['question']) ?></summary>
+                                <p><?= nl2br(e($faq['answer'])) ?></p>
+                            </details><?php endforeach; ?>
+                    </section><?php endif; ?>
+                <?php if (!empty($blog['relatedProducts']) || !empty($blog['relatedBlogs'])): ?><section class="related">
+                        <h2>Related Resources</h2>
+                        <div class="related-grid"><?php foreach (($blog['relatedProducts'] ?? []) as $item): ?><a href="#"><?= e($item['name'] ?? 'Product') ?></a><?php endforeach; ?><?php foreach (($blog['relatedBlogs'] ?? []) as $item): ?><a href="blog.php?domain=<?= e(urlencode($domain)) ?>&websiteId=<?= e(urlencode($websiteId)) ?>&slug=<?= e(urlencode($item['slug'] ?? '')) ?>"><?= e($item['title'] ?? 'Blog') ?></a><?php endforeach; ?></div>
+                    </section><?php endif; ?>
+                <?php if (!empty($blog['cta']['label'])): ?><section class="cta">
+                        <h2>Ready to discuss your requirement?</h2><a href="<?= e($blog['cta']['url'] ?? '/contact-us.php') ?>"><?= e($blog['cta']['label']) ?></a>
+                    </section><?php endif; ?>
+            </main>
+            <aside class="side-panel">
+                <h3>Search</h3>
+                <form class="side-search" action="blogs.php" method="get"><input type="search" name="q" placeholder="Search posts"><button aria-label="Search">⌕</button></form>
+                <h3>Recent Posts</h3><?php foreach ($recentBlogs as $recent): if (($recent['slug'] ?? '') === $slug) continue;
+                                            $ri = $recent['featuredImage'] ?? ($recent['images'][0] ?? ''); ?><a class="recent-post" href="blog.php?slug=<?= e(urlencode($recent['slug'] ?? '')) ?>"><?php if ($ri): ?><img src="<?= e($ri) ?>" alt=""><?php endif; ?><strong><?= e($recent['title'] ?? 'Blog') ?></strong></a><?php endforeach; ?><div class="quote-box">
+                    <h3>Request a Quote</h3>
+                    <p>Discuss your printing and converting machine requirement with our team.</p><a href="/contact-us.php">Contact Us</a>
+                </div>
+            </aside>
+        </div><?php endif; ?>
     <?php if (file_exists(__DIR__ . '/footer.php')) include_once __DIR__ . '/footer.php'; ?>
 </body>
 
