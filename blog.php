@@ -476,10 +476,12 @@ foreach (($blog['faqs'] ?? []) as $faq) {
         }
         /* Compact, readable article page */
         .hero {
-            max-width: 820px;
-            margin: 32px auto 0;
-            padding: 20px 20px 24px;
-            background: #fff
+            max-width: none;
+            width: 100%;
+            margin: 0;
+            padding: 42px 24px 48px;
+            background: linear-gradient(110deg, #fff1f3, #fff 52%, #f5d8dc);
+            border-bottom: 1px solid #efdadd
         }
 
         .hero:after {
@@ -500,12 +502,14 @@ foreach (($blog['faqs'] ?? []) as $faq) {
         }
 
         .article {
-            max-width: 820px;
-            margin-top: 0
+            width: calc(100% - 40px);
+            max-width: 980px;
+            margin: 34px auto 0
         }
 
         .featured {
-            max-height: 460px;
+            width: 100%;
+            max-height: 520px;
             border-radius: 3px;
             padding: 0;
             object-fit: cover

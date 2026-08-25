@@ -452,6 +452,33 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
       padding: 0 18px 55px
     }
 
+    .page-banner {
+      width: 100%;
+      padding: 42px 24px 52px;
+      text-align: center;
+      background: linear-gradient(110deg, #fff1f3, #fff 52%, #f5d8dc);
+      border-bottom: 1px solid #efdadd
+    }
+
+    .page-banner small {
+      color: #b40019;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .16em
+    }
+
+    .page-banner h1 {
+      margin: 8px 0;
+      color: #062b50;
+      font: 700 clamp(32px, 4vw, 48px)/1.15 Arial, sans-serif
+    }
+
+    .page-banner p {
+      margin: 0;
+      color: #596c7e;
+      font-size: 15px
+    }
+
     .grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px
@@ -522,6 +549,8 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
 
 <body>
   <?php if (file_exists(__DIR__ . '/header.php')) include_once __DIR__ . '/header.php'; ?>
+
+  <section class="page-banner"><small>MMW INDUSTRIAL INSIGHTS</small><h1>Latest Blogs &amp; Industry Updates</h1><p>Expert guidance, machine knowledge and manufacturing trends.</p></section>
 
   <main class="wrap"><?php if (!$data): ?><div class="empty">
         <h2>Blogs could not be loaded</h2>
