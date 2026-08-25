@@ -4,6 +4,10 @@ $currentHost = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? 'mohindramec
 $domain = preg_replace('/^www\./i', '', strtolower($currentHost));
 $page = max((int)($_GET['page'] ?? 1), 1);
 $websiteId = preg_replace('/[^a-f0-9]/i', '', $_GET['websiteId'] ?? '');
+if (isset($_GET['domain']) || isset($_GET['websiteId'])) {
+  header('Location: /blog/', true, 301);
+  exit;
+}
 
 function api_get($url)
 {
@@ -438,6 +442,7 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
         text-align: center
       }
     }
+
     /* Compact blog listing */
     .hero {
       padding: 34px 24px 46px
@@ -539,55 +544,199 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
     }
 
     @media(max-width:600px) {
-      .card { min-height: 410px }
-      .thumb { height: 220px }
-      .date-badge { top: 10px }
-      .grid { grid-template-columns: 1fr }
+      .card {
+        min-height: 410px
+      }
+
+      .thumb {
+        height: 220px
+      }
+
+      .date-badge {
+        top: 10px
+      }
+
+      .grid {
+        grid-template-columns: 1fr
+      }
     }
 
-    .blog-layout { max-width:1200px; margin:0 auto; padding:42px 20px 70px; display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:30px; align-items:start }
-    .blog-layout .wrap { width:100%; max-width:none; margin:0; padding:0 }
-    .blog-layout .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px }
-    .blog-layout .card { min-width:0 }
-    .side-panel { position:sticky; top:20px; padding:22px; background:#fff; border:1px solid #e5e5e5; border-radius:12px; box-shadow:0 8px 26px #0000000b }
-    .side-panel h3 { margin:0 0 14px; padding-bottom:10px; border-bottom:2px solid #bd001b; color:#172f43; font-size:13px; text-transform:uppercase }
-    .side-search { display:flex; margin-bottom:26px }
-    .side-search input { min-width:0; flex:1; height:40px; padding:0 11px; border:1px solid #ddd; border-right:0 }
-    .side-search button { width:42px; border:0; background:#bd001b; color:#fff; font-size:17px }
-    .recent-post { display:grid; grid-template-columns:84px minmax(0,1fr); gap:11px; align-items:center; padding:11px 0; border-bottom:1px solid #eee; color:#1c3042; text-decoration:none }
-    .recent-post img { width:84px; height:58px; object-fit:cover }
-    .recent-post strong { display:block; font-size:12px; line-height:1.35 }
-    .quote-box { margin-top:26px; padding:18px; background:#fff3f5; border-left:4px solid #bd001b }
-    .quote-box p { font-size:13px; line-height:1.5 }
-    .quote-box a { display:block; padding:11px; background:#bd001b; color:#fff; text-align:center; text-decoration:none; font-size:12px; font-weight:800; text-transform:uppercase }
-    @media(max-width:900px) { .blog-layout { grid-template-columns:1fr } .side-panel { position:static } }
-    @media(max-width:640px) { .blog-layout { padding:25px 14px 50px } .blog-layout .grid { grid-template-columns:1fr } .page-banner { padding:32px 16px 38px } }
+    .blog-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 42px 20px 70px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 30px;
+      align-items: start
+    }
+
+    .blog-layout .wrap {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0
+    }
+
+    .blog-layout .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px
+    }
+
+    .blog-layout .card {
+      min-width: 0
+    }
+
+    .side-panel {
+      position: sticky;
+      top: 20px;
+      padding: 22px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      box-shadow: 0 8px 26px #0000000b
+    }
+
+    .side-panel h3 {
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #bd001b;
+      color: #172f43;
+      font-size: 13px;
+      text-transform: uppercase
+    }
+
+    .side-search {
+      display: flex;
+      margin-bottom: 26px
+    }
+
+    .side-search input {
+      min-width: 0;
+      flex: 1;
+      height: 40px;
+      padding: 0 11px;
+      border: 1px solid #ddd;
+      border-right: 0
+    }
+
+    .side-search button {
+      width: 42px;
+      border: 0;
+      background: #bd001b;
+      color: #fff;
+      font-size: 17px
+    }
+
+    .recent-post {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 11px;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid #eee;
+      color: #1c3042;
+      text-decoration: none
+    }
+
+    .recent-post img {
+      width: 84px;
+      height: 58px;
+      object-fit: cover
+    }
+
+    .recent-post strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.35
+    }
+
+    .quote-box {
+      margin-top: 26px;
+      padding: 18px;
+      background: #fff3f5;
+      border-left: 4px solid #bd001b
+    }
+
+    .quote-box p {
+      font-size: 13px;
+      line-height: 1.5
+    }
+
+    .quote-box a {
+      display: block;
+      padding: 11px;
+      background: #bd001b;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase
+    }
+
+    @media(max-width:900px) {
+      .blog-layout {
+        grid-template-columns: 1fr
+      }
+
+      .side-panel {
+        position: static
+      }
+    }
+
+    @media(max-width:640px) {
+      .blog-layout {
+        padding: 25px 14px 50px
+      }
+
+      .blog-layout .grid {
+        grid-template-columns: 1fr
+      }
+
+      .page-banner {
+        padding: 32px 16px 38px
+      }
+    }
   </style>
 </head>
 
 <body>
   <?php if (file_exists(__DIR__ . '/header.php')) include_once __DIR__ . '/header.php'; ?>
 
-  <section class="page-banner"><small>MMW INDUSTRIAL INSIGHTS</small><h1>Latest Blogs &amp; Industry Updates</h1><p>Expert guidance, machine knowledge and manufacturing trends.</p></section>
+  <section class="page-banner"><small>MMW INDUSTRIAL INSIGHTS</small>
+    <h1>Latest Blogs &amp; Industry Updates</h1>
+    <p>Expert guidance, machine knowledge and manufacturing trends.</p>
+  </section>
 
-  <div class="blog-layout"><main class="wrap"><?php if (!$data): ?><div class="empty">
-        <h2>Blogs could not be loaded</h2>
-        <p>Confirm that the blog API is running and this domain is registered in the admin panel.</p>
-      </div><?php elseif (!$blogs): ?><div class="empty">
-        <h2>No published blogs yet</h2>
-        <p>Publish your first article from the MMW admin panel.</p>
-      </div><?php else: ?><section class="grid"><?php foreach ($blogs as $blog): $image = $blog['featuredImage'] ?? ($blog['images'][0] ?? '');
-                                                  $published = strtotime($blog['publishedAt'] ?? $blog['createdAt']); ?><a class="card" href="blog.php?domain=<?= e(urlencode($domain)) ?>&websiteId=<?= e(urlencode($websiteId)) ?>&slug=<?= e(urlencode($blog['slug'])) ?>">
-            <div class="thumb"><?php if ($image): ?><img src="<?= e($image) ?>" alt="<?= e($blog['featuredImageAlt'] ?? $blog['title']) ?>"><?php else: ?><div class="placeholder">MMW</div><?php endif; ?></div>
-            <time class="date-badge" datetime="<?= e(date('Y-m-d', $published)) ?>"><strong><?= e(date('d', $published)) ?></strong><span><?= e(date('M', $published)) ?></span></time>
-            <div class="body">
-              <div class="meta"><span><?= e($blog['category']['name'] ?? 'Industry') ?></span></div>
-              <h2><?= e($blog['title']) ?></h2>
-              <p><?= e(excerpt($blog)) ?></p><span class="read">Read More <b>→</b></span>
-            </div>
-          </a><?php endforeach; ?></section>
-      <nav class="pages"><?php for ($i = 1; $i <= ($pagination['pages'] ?? 1); $i++): ?><a class="<?= $i == ($pagination['page'] ?? 1) ? 'active' : '' ?>" href="?page=<?= $i ?>"><?= $i ?></a><?php endfor; ?></nav><?php endif; ?>
-  </main><aside class="side-panel"><h3>Search</h3><form class="side-search" action="blogs.php" method="get"><input type="search" name="q" placeholder="Search posts"><button aria-label="Search">⌕</button></form><h3>Recent Posts</h3><?php foreach (array_slice($blogs,0,5) as $recent): $ri=$recent['featuredImage'] ?? ($recent['images'][0] ?? ''); ?><a class="recent-post" href="blog.php?slug=<?= e(urlencode($recent['slug'] ?? '')) ?>"><?php if($ri): ?><img src="<?= e($ri) ?>" alt=""><?php endif; ?><strong><?= e($recent['title'] ?? 'Blog') ?></strong></a><?php endforeach; ?><div class="quote-box"><h3>Request a Quote</h3><p>Share your machine requirement and our team will contact you.</p><a href="/contact-us.php">Submit Enquiry</a></div></aside></div>
+  <div class="blog-layout">
+    <main class="wrap"><?php if (!$data): ?><div class="empty">
+          <h2>Blogs could not be loaded</h2>
+          <p>Confirm that the blog API is running and this domain is registered in the admin panel.</p>
+        </div><?php elseif (!$blogs): ?><div class="empty">
+          <h2>No published blogs yet</h2>
+          <p>Publish your first article from the MMW admin panel.</p>
+        </div><?php else: ?><section class="grid"><?php foreach ($blogs as $blog): $image = $blog['featuredImage'] ?? ($blog['images'][0] ?? '');
+                                                    $published = strtotime($blog['publishedAt'] ?? $blog['createdAt']); ?><a class="card" href="/blog/<?= e(rawurlencode($blog['slug'])) ?>/">
+              <div class="thumb"><?php if ($image): ?><img src="<?= e($image) ?>" alt="<?= e($blog['featuredImageAlt'] ?? $blog['title']) ?>"><?php else: ?><div class="placeholder">MMW</div><?php endif; ?></div>
+              <time class="date-badge" datetime="<?= e(date('Y-m-d', $published)) ?>"><strong><?= e(date('d', $published)) ?></strong><span><?= e(date('M', $published)) ?></span></time>
+              <div class="body">
+                <div class="meta"><span><?= e($blog['category']['name'] ?? 'Industry') ?></span></div>
+                <h2><?= e($blog['title']) ?></h2>
+                <p><?= e(excerpt($blog)) ?></p><span class="read">Read More <b>→</b></span>
+              </div>
+            </a><?php endforeach; ?></section>
+        <nav class="pages"><?php for ($i = 1; $i <= ($pagination['pages'] ?? 1); $i++): ?><a class="<?= $i == ($pagination['page'] ?? 1) ? 'active' : '' ?>" href="/blog/<?= $i > 1 ? '?page=' . $i : '' ?>"><?= $i ?></a><?php endfor; ?></nav><?php endif; ?>
+    </main>
+    <aside class="side-panel">
+      <h3>Search</h3>
+      <form class="side-search" action="/blog/" method="get"><input type="search" name="q" placeholder="Search posts"><button aria-label="Search">⌕</button></form>
+      <h3>Recent Posts</h3><?php foreach (array_slice($blogs, 0, 5) as $recent): $ri = $recent['featuredImage'] ?? ($recent['images'][0] ?? ''); ?><a class="recent-post" href="/blog/<?= e(rawurlencode($recent['slug'] ?? '')) ?>/"><?php if ($ri): ?><img src="<?= e($ri) ?>" alt=""><?php endif; ?><strong><?= e($recent['title'] ?? 'Blog') ?></strong></a><?php endforeach; ?><div class="quote-box">
+        <h3>Request a Quote</h3>
+        <p>Share your machine requirement and our team will contact you.</p><a href="contact.php">Contact us</a>
+      </div>
+    </aside>
+  </div>
   <?php if (file_exists(__DIR__ . '/footer.php')) include_once __DIR__ . '/footer.php'; ?>
 </body>
 

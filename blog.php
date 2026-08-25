@@ -5,7 +5,7 @@ $domain = preg_replace('/^www\./i', '', strtolower($currentHost));
 $websiteId = preg_replace('/[^a-f0-9]/i', '', $_GET['websiteId'] ?? '');
 $slug = preg_replace('/[^a-z0-9-]/i', '', $_GET['slug'] ?? '');
 if (!$slug) {
-    header('Location: blogs.php?domain=' . urlencode($domain) . '&websiteId=' . urlencode($websiteId));
+    header('Location: /blog/', true, 302);
     exit;
 }
 function api_get($url)
@@ -41,7 +41,7 @@ if (!$blog) {
 $title = $blog['metaTitle'] ?? $blog['title'] ?? 'Blog not found';
 $description = $blog['metaDescription'] ?? $blog['excerpt'] ?? '';
 $image = $blog['ogImage'] ?? $blog['featuredImage'] ?? ($blog['images'][0] ?? '');
-$canonical = $blog['canonicalUrl'] ?? ('https://' . $domain . '/blog.php?slug=' . urlencode($slug));
+$canonical = $blog['canonicalUrl'] ?? ('https://' . $domain . '/blog/' . rawurlencode($slug) . '/');
 $robots = ($blog['robotsIndex'] ?? 'index') . ',' . ($blog['robotsFollow'] ?? 'follow');
 $faqSchema = [];
 foreach (($blog['faqs'] ?? []) as $faq) {
@@ -747,7 +747,7 @@ foreach (($blog['faqs'] ?? []) as $faq) {
                     </section><?php endif; ?>
                 <?php if (!empty($blog['relatedProducts']) || !empty($blog['relatedBlogs'])): ?><section class="related">
                         <h2>Related Resources</h2>
-                        <div class="related-grid"><?php foreach (($blog['relatedProducts'] ?? []) as $item): ?><a href="#"><?= e($item['name'] ?? 'Product') ?></a><?php endforeach; ?><?php foreach (($blog['relatedBlogs'] ?? []) as $item): ?><a href="blog.php?domain=<?= e(urlencode($domain)) ?>&websiteId=<?= e(urlencode($websiteId)) ?>&slug=<?= e(urlencode($item['slug'] ?? '')) ?>"><?= e($item['title'] ?? 'Blog') ?></a><?php endforeach; ?></div>
+                        <div class="related-grid"><?php foreach (($blog['relatedProducts'] ?? []) as $item): ?><a href="#"><?= e($item['name'] ?? 'Product') ?></a><?php endforeach; ?><?php foreach (($blog['relatedBlogs'] ?? []) as $item): ?><a href="/blog/<?= e(rawurlencode($item['slug'] ?? '')) ?>/"><?= e($item['title'] ?? 'Blog') ?></a><?php endforeach; ?></div>
                     </section><?php endif; ?>
                 <?php if (!empty($blog['cta']['label'])): ?><section class="cta">
                         <h2>Ready to discuss your requirement?</h2><a href="<?= e($blog['cta']['url'] ?? '/contact-us.php') ?>"><?= e($blog['cta']['label']) ?></a>
@@ -755,9 +755,9 @@ foreach (($blog['faqs'] ?? []) as $faq) {
             </main>
             <aside class="side-panel">
                 <h3>Search</h3>
-                <form class="side-search" action="blogs.php" method="get"><input type="search" name="q" placeholder="Search posts"><button aria-label="Search">⌕</button></form>
+                <form class="side-search" action="/blog/" method="get"><input type="search" name="q" placeholder="Search posts"><button aria-label="Search">⌕</button></form>
                 <h3>Recent Posts</h3><?php foreach ($recentBlogs as $recent): if (($recent['slug'] ?? '') === $slug) continue;
-                                            $ri = $recent['featuredImage'] ?? ($recent['images'][0] ?? ''); ?><a class="recent-post" href="blog.php?slug=<?= e(urlencode($recent['slug'] ?? '')) ?>"><?php if ($ri): ?><img src="<?= e($ri) ?>" alt=""><?php endif; ?><strong><?= e($recent['title'] ?? 'Blog') ?></strong></a><?php endforeach; ?><div class="quote-box">
+                                            $ri = $recent['featuredImage'] ?? ($recent['images'][0] ?? ''); ?><a class="recent-post" href="/blog/<?= e(rawurlencode($recent['slug'] ?? '')) ?>/"><?php if ($ri): ?><img src="<?= e($ri) ?>" alt=""><?php endif; ?><strong><?= e($recent['title'] ?? 'Blog') ?></strong></a><?php endforeach; ?><div class="quote-box">
                     <h3>Request a Quote</h3>
                     <p>Discuss your printing and converting machine requirement with our team.</p><a href="/contact-us.php">Contact Us</a>
                 </div>

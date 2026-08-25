@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteRule ^blog/?$ blogs.php [L,QSA]
+RewriteRule ^blog/([a-z0-9-]+)/?$ blog.php?slug=$1 [L,QSA,NC]
