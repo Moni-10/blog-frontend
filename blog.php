@@ -53,6 +53,7 @@ foreach (($blog['faqs'] ?? []) as $faq) {
 
 <head>
     <meta charset="utf-8">
+    <base href="/">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?= e($title) ?></title>
     <meta name="description" content="<?= e($description) ?>">

@@ -52,6 +52,7 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
 
 <head>
   <meta charset="utf-8">
+  <base href="/">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Industrial Insights & Machine Blogs | <?= e($siteName) ?></title>
   <meta name="description" content="Latest machine, manufacturing and industrial insights from <?= e($siteName) ?>.">
