@@ -1,7 +1,7 @@
 <?php
 $apiBase = rtrim(getenv('BLOG_API_BASE_URL') ?: 'https://blog-backend.mohindramachine.tech', '/');
 $currentHost = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? 'mohindramechanicalworks.com');
-$domain = preg_replace('/^www\./i', '', $_GET['domain'] ?? $currentHost);
+$domain = preg_replace('/^www\./i', '', strtolower($currentHost));
 $page = max((int)($_GET['page'] ?? 1), 1);
 $websiteId = preg_replace('/[^a-f0-9]/i', '', $_GET['websiteId'] ?? '');
 
