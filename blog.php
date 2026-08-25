@@ -474,7 +474,69 @@ foreach (($blog['faqs'] ?? []) as $faq) {
                 margin-right: 14px
             }
         }
-    </style>
+        /* Compact, readable article page */
+        .hero {
+            padding: 42px 24px 68px
+        }
+
+        .hero:after {
+            width: 170px;
+            height: 170px;
+            top: 18px
+        }
+
+        .hero h1 {
+            max-width: 850px;
+            font-size: clamp(34px, 4.5vw, 52px);
+            line-height: 1.08;
+            margin: 14px auto 12px
+        }
+
+        .hero-excerpt {
+            max-width: 680px;
+            margin-top: 14px;
+            font-size: 15px;
+            line-height: 1.6
+        }
+
+        .article {
+            max-width: 880px;
+            margin-top: -34px
+        }
+
+        .featured {
+            max-height: 420px;
+            border-radius: 14px;
+            padding: 9px
+        }
+
+        .content {
+            margin-top: 18px;
+            padding: 36px 44px;
+            border-radius: 14px;
+            font-size: 16px;
+            line-height: 1.75
+        }
+
+        .content > p:first-child {
+            font-size: 17px
+        }
+
+        .content h2 {
+            font-size: 29px
+        }
+
+        .content h3 {
+            font-size: 22px
+        }
+
+        @media(max-width:650px) {
+            .hero { padding: 32px 18px 55px }
+            .hero h1 { font-size: 34px }
+            .article { margin-top: -24px }
+            .content { padding: 26px 18px }
+        }
+</style>
 </head>
 
 <body>

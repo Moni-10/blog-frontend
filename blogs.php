@@ -438,6 +438,81 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
         text-align: center
       }
     }
+    /* Compact blog listing */
+    .hero {
+      padding: 34px 24px 46px
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 4.5vw, 50px)
+    }
+
+    .wrap {
+      max-width: 1180px;
+      padding: 0 18px 55px
+    }
+
+    .grid {
+      gap: 22px
+    }
+
+    .card {
+      min-height: 420px;
+      border-radius: 14px
+    }
+
+    .thumb {
+      height: 215px;
+      padding: 12px 12px 0
+    }
+
+    .date-badge {
+      right: 16px;
+      top: 183px;
+      width: 54px
+    }
+
+    .date-badge strong {
+      height: 44px;
+      font-size: 19px
+    }
+
+    .date-badge span {
+      height: 34px;
+      font-size: 15px
+    }
+
+    .body {
+      padding: 18px 18px 20px
+    }
+
+    .body h2 {
+      margin-top: 10px
+    }
+
+    .body p {
+      font-size: 14px;
+      -webkit-line-clamp: 2
+    }
+
+    .read {
+      align-self: flex-start;
+      padding: 9px 14px;
+      border-radius: 7px;
+      background: #a90017;
+      color: #fff;
+      font-size: 13px
+    }
+
+    .read b {
+      font-size: 17px
+    }
+
+    @media(max-width:600px) {
+      .card { min-height: 410px }
+      .thumb { height: 220px }
+      .date-badge { top: 188px }
+    }
   </style>
 </head>
 
