@@ -1628,6 +1628,8 @@
   box-shadow: 8px 0 28px #35000618;
 }
 .admin-shell .admin-main {
+  width: calc(100% - 270px);
+  margin-left: 270px;
   overflow: hidden;
 }
 .mmw-sidebar-brand {
