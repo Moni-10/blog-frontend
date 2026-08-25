@@ -1,0 +1,508 @@
+<?php
+$apiBase = rtrim(getenv('BLOG_API_BASE_URL') ?: 'https://blog-backend.mohindramachine.tech', '/');
+$currentHost = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? 'mohindramechanicalworks.com');
+$domain = preg_replace('/^www\./i', '', $_GET['domain'] ?? $currentHost);
+$websiteId = preg_replace('/[^a-f0-9]/i', '', $_GET['websiteId'] ?? '');
+$slug = preg_replace('/[^a-z0-9-]/i', '', $_GET['slug'] ?? '');
+if (!$slug) {
+    header('Location: blogs.php?domain=' . urlencode($domain) . '&websiteId=' . urlencode($websiteId));
+    exit;
+}
+function api_get($url)
+{
+    if (function_exists('curl_init')) {
+        $c = curl_init($url);
+        curl_setopt_array($c, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 12, CURLOPT_HTTPHEADER => ['Accept: application/json']]);
+        $b = curl_exec($c);
+        $s = curl_getinfo($c, CURLINFO_HTTP_CODE);
+        curl_close($c);
+        return $s >= 200 && $s < 300 ? json_decode($b, true) : null;
+    }
+    $b = @file_get_contents($url);
+    return $b === false ? null : json_decode($b, true);
+}
+function e($v)
+{
+    return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+}
+function clean_domain($value)
+{
+    return preg_replace('/^www\./i', '', strtolower(trim(preg_replace('#^https?://#i', '', rtrim((string)$value, '/')))));
+}
+$detail = $slug ? api_get($apiBase . '/api/blogs/public/' . rawurlencode(clean_domain($domain)) . '/' . rawurlencode($slug)) : null;
+$site = is_array($detail) ? ($detail['website'] ?? null) : null;
+$websiteId = $site['_id'] ?? $websiteId;
+$blog = is_array($detail) ? ($detail['blog'] ?? null) : null;
+if (!$blog) {
+    http_response_code(404);
+}
+$title = $blog['metaTitle'] ?? $blog['title'] ?? 'Blog not found';
+$description = $blog['metaDescription'] ?? $blog['excerpt'] ?? '';
+$image = $blog['ogImage'] ?? $blog['featuredImage'] ?? ($blog['images'][0] ?? '');
+$canonical = $blog['canonicalUrl'] ?? ('https://' . $domain . '/blog.php?slug=' . urlencode($slug));
+$robots = ($blog['robotsIndex'] ?? 'index') . ',' . ($blog['robotsFollow'] ?? 'follow');
+$faqSchema = [];
+foreach (($blog['faqs'] ?? []) as $faq) {
+    if (!empty($faq['question']) && !empty($faq['answer'])) $faqSchema[] = ['@type' => 'Question', 'name' => $faq['question'], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq['answer']]];
+}
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title><?= e($title) ?></title>
+    <meta name="description" content="<?= e($description) ?>">
+    <meta name="robots" content="<?= e($robots) ?>">
+    <link rel="canonical" href="<?= e($canonical) ?>">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="<?= e($blog['ogTitle'] ?? $title) ?>">
+    <meta property="og:description" content="<?= e($blog['ogDescription'] ?? $description) ?>"><?php if ($image): ?>
+        <meta property="og:image" content="<?= e($image) ?>"><?php endif; ?>
+    <?php if ($faqSchema): ?><script type="application/ld+json">
+            <?= json_encode(['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $faqSchema], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+        </script><?php endif; ?>
+    <style>
+        :root {
+            --red: #bd001b;
+            --dark: #320008;
+            --soft: #fff1f3;
+            --muted: #706769
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #292326;
+            background: #fff
+        }
+
+        a {
+            color: var(--red)
+        }
+
+        .nav {
+            height: 72px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1120px;
+            margin: auto
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 900;
+            text-decoration: none;
+            color: var(--dark)
+        }
+
+        .logo span {
+            color: var(--red)
+        }
+
+        .hero {
+            background: linear-gradient(115deg, #fff0f2, #ffd7dc);
+            padding: 72px 24px 110px;
+            text-align: center
+        }
+
+        .hero .category {
+            color: var(--red);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase
+        }
+
+        .hero h1 {
+            max-width: 920px;
+            margin: 16px auto;
+            font: 600 clamp(40px, 7vw, 72px)/1.06 Georgia
+        }
+
+        .byline {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .article {
+            max-width: 860px;
+            margin: -62px auto 70px;
+            padding: 0 24px
+        }
+
+        .featured {
+            width: 100%;
+            max-height: 520px;
+            object-fit: cover;
+            border-radius: 17px;
+            box-shadow: 0 15px 45px #40000818
+        }
+
+        .content {
+            font: 17px/1.85 Georgia, serif;
+            padding: 42px 28px
+        }
+
+        .content h2,
+        .content h3 {
+            color: var(--dark);
+            line-height: 1.2
+        }
+
+        .content h2 {
+            font-size: 34px;
+            margin-top: 42px
+        }
+
+        .content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 11px
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .content td,
+        .content th {
+            border: 1px solid #ddd;
+            padding: 10px
+        }
+
+        .video {
+            position: relative;
+            padding-top: 56.25%;
+            margin: 30px 0
+        }
+
+        .video iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0
+        }
+
+        .faq,
+        .cta,
+        .related {
+            max-width: 860px;
+            margin: 35px auto;
+            padding: 0 24px
+        }
+
+        .faq h2,
+        .related h2 {
+            font: 600 34px Georgia
+        }
+
+        .faq details {
+            border-top: 1px solid #eadbdd;
+            padding: 17px 0
+        }
+
+        .faq summary {
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .faq p {
+            color: var(--muted);
+            line-height: 1.7
+        }
+
+        .cta {
+            padding: 38px;
+            border-radius: 15px;
+            background: linear-gradient(110deg, #70000d, #cc001d);
+            color: #fff;
+            text-align: center
+        }
+
+        .cta h2 {
+            font: 600 34px Georgia;
+            margin: 0 0 18px
+        }
+
+        .cta a {
+            display: inline-block;
+            background: #fff;
+            color: var(--red);
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 800
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .related-grid a {
+            padding: 17px;
+            border: 1px solid #eadbdd;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #302529;
+            font-weight: 700
+        }
+
+        @media(max-width:600px) {
+            .hero {
+                padding-top: 45px
+            }
+
+            .content {
+                padding: 30px 5px
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        /* Premium MMW article layout */
+        body {
+            background: #fbfaf9;
+            color: #14283b
+        }
+
+        .nav {
+            height: 78px;
+            position: relative
+        }
+
+        .nav:before {
+            content: "MMW INSIGHTS";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            letter-spacing: .16em;
+            font-weight: 800;
+            color: #8c7377
+        }
+
+        .hero {
+            position: relative;
+            background: linear-gradient(120deg, #fff1f3, #fff 55%, #f5d8dc);
+            padding: 75px 24px 125px;
+            border-top: 1px solid #f0dce0
+        }
+
+        .hero:after {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: #c5001b0b;
+            right: 8%;
+            top: 25px
+        }
+
+        .hero h1 {
+            position: relative;
+            z-index: 1;
+            color: #062c50;
+            max-width: 980px;
+            font-size: clamp(40px, 6vw, 70px)
+        }
+
+        .hero-excerpt {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 22px auto 0;
+            color: #526779;
+            font-size: 16px;
+            line-height: 1.7
+        }
+
+        .article {
+            max-width: 960px;
+            margin-top: -72px
+        }
+
+        .featured {
+            display: block;
+            max-height: 560px;
+            padding: 14px;
+            background: #fff;
+            object-fit: contain;
+            border: 1px solid #e5d9db;
+            border-radius: 20px
+        }
+
+        .content {
+            margin-top: 24px;
+            padding: 50px 65px;
+            background: #fff;
+            border: 1px solid #eee4e5;
+            border-radius: 18px;
+            box-shadow: 0 15px 38px #42000808;
+            color: #263b4b;
+            font: 17px/1.9 Arial, sans-serif
+        }
+
+        .content>p:first-child {
+            font-size: 19px;
+            color: #1a3347
+        }
+
+        .content h2 {
+            font: 700 34px/1.2 Georgia;
+            color: #072e52;
+            padding-top: 10px
+        }
+
+        .content h3 {
+            font: 700 25px/1.25 Georgia;
+            color: #8f0013
+        }
+
+        .content blockquote {
+            margin: 32px 0;
+            padding: 22px 26px;
+            border-left: 5px solid #c4001b;
+            background: #fff2f4;
+            color: #5c3339
+        }
+
+        .content a {
+            font-weight: 700
+        }
+
+        .content ul,
+        .content ol {
+            padding-left: 24px
+        }
+
+        .content li {
+            margin: 8px 0
+        }
+
+        .content img {
+            display: block;
+            margin: 30px auto;
+            border: 1px solid #eee;
+            padding: 6px
+        }
+
+        .faq,
+        .related {
+            max-width: 960px;
+            padding: 30px 45px;
+            border: 1px solid #eadfe1;
+            border-radius: 17px;
+            background: #fff
+        }
+
+        .faq details:first-of-type {
+            border-top: 0
+        }
+
+        .faq summary {
+            color: #092f52;
+            font-size: 15px
+        }
+
+        .cta {
+            max-width: 912px;
+            margin-top: 40px;
+            padding: 48px;
+            background: linear-gradient(115deg, #75000e, #cf001e);
+            box-shadow: 0 16px 40px #76001122
+        }
+
+        .related-grid a {
+            background: #fff7f8;
+            transition: .2s
+        }
+
+        .related-grid a:hover {
+            border-color: #bd001b;
+            transform: translateY(-2px)
+        }
+
+        @media(max-width:650px) {
+            .nav:before {
+                display: none
+            }
+
+            .hero {
+                padding: 48px 18px 95px
+            }
+
+            .article {
+                padding: 0 14px
+            }
+
+            .featured {
+                padding: 7px
+            }
+
+            .content {
+                padding: 30px 20px
+            }
+
+            .content h2 {
+                font-size: 28px
+            }
+
+            .faq,
+            .related {
+                margin-left: 14px;
+                margin-right: 14px;
+                padding: 24px 18px
+            }
+
+            .cta {
+                margin-left: 14px;
+                margin-right: 14px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <?php if (file_exists(__DIR__ . '/header.php')) include_once __DIR__ . '/header.php'; ?>
+
+    <?php if (!$blog): ?><main class="hero">
+            <h1>Blog not found</h1>
+            <p>Check the URL or return to all blogs.</p>
+        </main><?php else: ?><header class="hero"><span class="category"><?= e($blog['category']['name'] ?? 'Industrial Insights') ?></span>
+            <h1><?= e($blog['title']) ?></h1>
+            <div class="byline">By <?= e($blog['authorName'] ?? 'MMW Team') ?> · <?= e(date('d F Y', strtotime($blog['publishedAt'] ?? $blog['createdAt']))) ?></div>
+            <?php if (!empty($blog['excerpt'])): ?><p class="hero-excerpt"><?= e($blog['excerpt']) ?></p><?php endif; ?>
+        </header>
+        <article class="article"><?php if ($blog['featuredImage'] ?? ''): ?><img class="featured" src="<?= e($blog['featuredImage']) ?>" alt="<?= e($blog['featuredImageAlt'] ?? $blog['title']) ?>"><?php endif; ?><div class="content"><?= $blog['content'] ?></div><?php if ($blog['youtubeUrl'] ?? ''): $vid = preg_replace('~.*(?:youtu.be/|v=|embed/)([^?&/]+).*~', '$1', $blog['youtubeUrl']); ?><div class="video"><iframe src="https://www.youtube.com/embed/<?= e($vid) ?>" allowfullscreen></iframe></div><?php endif; ?></article>
+        <?php if (!empty($blog['faqs'])): ?><section class="faq">
+                <h2>Frequently Asked Questions</h2><?php foreach ($blog['faqs'] as $faq): ?><details>
+                        <summary><?= e($faq['question']) ?></summary>
+                        <p><?= nl2br(e($faq['answer'])) ?></p>
+                    </details><?php endforeach; ?>
+            </section><?php endif; ?>
+        <?php if (!empty($blog['relatedProducts']) || !empty($blog['relatedBlogs'])): ?><section class="related">
+                <h2>Related Resources</h2>
+                <div class="related-grid"><?php foreach (($blog['relatedProducts'] ?? []) as $item): ?><a href="#"><?= e($item['name'] ?? 'Product') ?></a><?php endforeach; ?><?php foreach (($blog['relatedBlogs'] ?? []) as $item): ?><a href="blog.php?domain=<?= e(urlencode($domain)) ?>&websiteId=<?= e(urlencode($websiteId)) ?>&slug=<?= e(urlencode($item['slug'] ?? '')) ?>"><?= e($item['title'] ?? 'Blog') ?></a><?php endforeach; ?></div>
+            </section><?php endif; ?>
+        <?php if (!empty($blog['cta']['label'])): ?><section class="cta">
+                <h2>Ready to discuss your requirement?</h2><a href="<?= e($blog['cta']['url'] ?? '/contact') ?>"><?= e($blog['cta']['label']) ?></a>
+            </section><?php endif; ?><?php endif; ?>
+    <?php if (file_exists(__DIR__ . '/footer.php')) include_once __DIR__ . '/footer.php'; ?>
+</body>
+
+</html>
