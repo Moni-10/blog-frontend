@@ -448,38 +448,40 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
     }
 
     .wrap {
-      max-width: 1180px;
+      max-width: 940px;
       padding: 0 18px 55px
     }
 
     .grid {
-      gap: 22px
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px
     }
 
     .card {
-      min-height: 420px;
-      border-radius: 14px
+      min-height: 390px;
+      border-radius: 5px
     }
 
     .thumb {
-      height: 215px;
-      padding: 12px 12px 0
+      height: 205px;
+      padding: 0
     }
 
     .date-badge {
-      right: 16px;
-      top: 183px;
-      width: 54px
+      left: 10px;
+      right: auto;
+      top: 10px;
+      width: 44px
     }
 
     .date-badge strong {
-      height: 44px;
-      font-size: 19px
+      height: 31px;
+      font-size: 14px
     }
 
     .date-badge span {
-      height: 34px;
-      font-size: 15px
+      height: 24px;
+      font-size: 11px
     }
 
     .body {
@@ -497,11 +499,12 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
 
     .read {
       align-self: flex-start;
-      padding: 9px 14px;
-      border-radius: 7px;
-      background: #a90017;
-      color: #fff;
-      font-size: 13px
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #c0001a;
+      font-size: 11px;
+      text-transform: uppercase
     }
 
     .read b {
@@ -511,7 +514,8 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
     @media(max-width:600px) {
       .card { min-height: 410px }
       .thumb { height: 220px }
-      .date-badge { top: 188px }
+      .date-badge { top: 10px }
+      .grid { grid-template-columns: 1fr }
     }
   </style>
 </head>
