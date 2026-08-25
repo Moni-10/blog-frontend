@@ -41,7 +41,7 @@ if (!$blog) {
 $title = $blog['metaTitle'] ?? $blog['title'] ?? 'Blog not found';
 $description = $blog['metaDescription'] ?? $blog['excerpt'] ?? '';
 $image = $blog['ogImage'] ?? $blog['featuredImage'] ?? ($blog['images'][0] ?? '');
-$canonical = $blog['canonicalUrl'] ?? ('https://' . $domain . '/blog/' . rawurlencode($slug) . '/');
+$canonical = $blog['canonicalUrl'] ?? ('https://' . strtolower($currentHost) . '/blog/' . rawurlencode($slug) . '/');
 $robots = ($blog['robotsIndex'] ?? 'index') . ',' . ($blog['robotsFollow'] ?? 'follow');
 $faqSchema = [];
 foreach (($blog['faqs'] ?? []) as $faq) {

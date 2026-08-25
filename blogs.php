@@ -56,6 +56,7 @@ $pagination = is_array($feed) ? ($feed['pagination'] ?? ['page' => $page, 'pages
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Industrial Insights & Machine Blogs | <?= e($siteName) ?></title>
   <meta name="description" content="Latest machine, manufacturing and industrial insights from <?= e($siteName) ?>.">
+  <link rel="canonical" href="https://<?= e(strtolower($currentHost)) ?>/blog/">
   <style>
     :root {
       --red: #bd001b;
