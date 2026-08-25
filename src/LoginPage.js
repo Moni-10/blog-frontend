@@ -11,10 +11,25 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const handleLogin = async (event) => {
     event.preventDefault(); setLoading(true); setError("");
-    if (username.trim().toLowerCase() !== "admin") { setError("Please enter the admin username."); setLoading(false); return; }
-    localStorage.setItem("adminApiKey", password);
-    try { await api.get("/api/blogs"); localStorage.setItem("isLoggedIn", "true"); localStorage.setItem("adminUsername", username.trim()); navigate("/"); }
-    catch (err) { localStorage.removeItem("adminApiKey"); setError(err.response?.data?.error || "Login failed. Check your password and API connection."); }
+    try {
+      const response = await api.post("/api/admin/login", {
+        username: username.trim(),
+        password,
+      });
+      const apiKey = response.data?.apiKey;
+      if (!response.data?.success || !apiKey) throw new Error("The server returned an invalid login response.");
+
+      localStorage.setItem("adminApiKey", apiKey);
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("adminUsername", username.trim());
+      navigate("/");
+    }
+    catch (err) {
+      localStorage.removeItem("adminApiKey");
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("adminUsername");
+      setError(err.response?.data?.message || err.response?.data?.error || err.message || "Login failed. Check your credentials and API connection.");
+    }
     finally { setLoading(false); }
   };
   return (
